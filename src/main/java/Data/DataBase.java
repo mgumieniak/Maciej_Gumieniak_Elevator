@@ -6,47 +6,45 @@ import Domains.ElevatorInterface;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-
 public class DataBase implements DataBaseInterface{
 
-    private int numberElevator;
-    private ConcurrentMap<Integer, Elevator> map;
+    public enum numberElevator{
+        NUMBERSSELEVATORS(16);
 
-    public DataBase(int numberElevator, ConcurrentMap<Integer, Elevator> map) {
-        this.numberElevator = numberElevator;
-        this.map = map;
-    }
+        int value;
+        numberElevator(int value) {
+            this.value=value;
+        }
 
-    @Override
-    public ElevatorInterface pickElevatorUpById(int id, int direct) {
-        ElevatorInterface elevator = map.get(id);
-        if(elevator == null){
-            map.putIfAbsent(id, Elevator.addElevator(id));
+        public int getValue() {
+            return value;
         }
     }
 
-    @Override
-    public void updateElevatorById(int id, int currentFlour, int directFlour) {
-        if(id < 0 && currentFlour<0 && directFlour<0){
-            throw new IllegalArgumentException("Wrong input argument");
-        }else map.compute(id, (Integer i, Elevator l)-> Elevator.update(l.getId(), currentFlour, directFlour));
-    }
+    private ConcurrentMap<Integer, Elevator> map;
 
-    @Override
-    public Iterable<ElevatorInterface> showStatusAllElevator() {
-        map.elements()
-    }
-
-    @Override
-    public Iterable<ElevatorInterface> showElevatorById(int id) {
-        return null;
+    public DataBase() {
+        this.map = new ConcurrentHashMap<>();
     }
 
     @Override
     public void addElevator(int id) {
+        if (id < 0 || id >= numberElevator.NUMBERSSELEVATORS.getValue()) {
+            throw new IllegalArgumentException("Id cannot be negative");
+        }
         if(map.get(id) == null){
-            map.putIfAbsent(id, Elevator.addElevator(id));
+            map.putIfAbsent(id, new Elevator(id,0,0));
         }else throw new IllegalArgumentException("Id exist");
+
+    }
+
+    @Override
+    public ElevatorInterface findElevatorUpById(int id) {
+        ElevatorInterface elevator = map.get(id);
+        if(elevator == null){
+            throw new IllegalArgumentException("Dont find elevator with id = "+id);
+        }
+        return elevator;
     }
 
     public ConcurrentMap<Integer, Elevator> getMap() {

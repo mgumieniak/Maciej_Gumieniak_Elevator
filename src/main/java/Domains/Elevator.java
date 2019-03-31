@@ -1,15 +1,12 @@
 package Domains;
-
-import java.util.Deque;
 import java.util.LinkedList;
-import java.util.Objects;
 
 public class Elevator implements ElevatorInterface{
 
     private final int id;
     private int currentFlour;
     private int destinationFlour;
-    private Deque<Integer> flourQue;
+    private LinkedList<Integer> flourQue;
 
 
     public Elevator(int id, int currentFlour, int destinationFlour) {
@@ -19,6 +16,29 @@ public class Elevator implements ElevatorInterface{
         this.flourQue = new LinkedList<>();
     }
 
+    void helpForDestNegative(int flourReport){
+        for(int i=0; i<this.getFlourQue().size(); i++){
+            if(this.getFlourQue().get(i)<flourReport && (this.currentFlour - flourReport)>0){
+                this.getFlourQue().add(i,flourReport);
+                break;
+            }else if(i == this.getFlourQue().size()-1){
+                this.getFlourQue().addLast(flourReport);
+                break;
+            }
+        }
+    }
+
+    void helpForDestPositive(int flourReport){
+        for(int i=0; i<this.getFlourQue().size(); i++){
+            if(this.getFlourQue().get(i)>flourReport && (this.currentFlour - flourReport)<0){
+                this.getFlourQue().add(i,flourReport);
+                break;
+            }else if(i == this.getFlourQue().size()-1){
+                this.getFlourQue().addLast(flourReport);
+                break;
+            }
+        }
+    }
 
     @Override
     public void pickUpElevator(int flourReport, int destination){
@@ -29,12 +49,14 @@ public class Elevator implements ElevatorInterface{
 
         if(this.getFlourQue().isEmpty()){
             this.getFlourQue().add(flourReport);
-        }else{
-            if((this.getFlourQue().peekFirst()>flourReport && flourReport>this.getCurrentFlour() && destination > 0)
-                    || (this.getFlourQue().peekFirst()<flourReport && flourReport<this.getCurrentFlour() && destination < 0)){
-                this.getFlourQue().addFirst(flourReport);
-            }else
-                this.getFlourQue().addLast(flourReport);
+        }else if(destination <0){
+            helpForDestNegative(flourReport);
+        }else if(destination >0){
+            helpForDestPositive(flourReport);
+        }else{ // desttination ==0
+            if(this.getCurrentFlour()>flourReport){
+                helpForDestNegative(flourReport);
+            }else helpForDestPositive(flourReport);
         }
     }
 
@@ -97,7 +119,8 @@ public class Elevator implements ElevatorInterface{
         this.destinationFlour = destinationFlour;
     }
 
-    public Deque<Integer> getFlourQue() {
+
+    public LinkedList<Integer> getFlourQue() {
         return flourQue;
     }
 
@@ -107,18 +130,5 @@ public class Elevator implements ElevatorInterface{
                 ", currentFlour=" + currentFlour +
                 ", destinationFlour=" + destinationFlour +
                 "} "+this.getFlourQue();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Elevator elevator = (Elevator) o;
-        return getId() == elevator.getId();
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId());
     }
 }

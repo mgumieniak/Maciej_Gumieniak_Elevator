@@ -3,6 +3,8 @@ package Data;
 import Domains.Elevator;
 import Domains.ElevatorInterface;
 
+import java.util.Collection;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -39,12 +41,17 @@ public class DataBase implements DataBaseInterface{
     }
 
     @Override
-    public ElevatorInterface findElevatorUpById(int id) {
-        ElevatorInterface elevator = map.get(id);
+    public Elevator findElevatorUpById(int id) {
+        Elevator elevator = map.get(id);
         if(elevator == null){
             throw new IllegalArgumentException("Dont find elevator with id = "+id);
         }
         return elevator;
+    }
+
+    @Override
+    public Collection<Elevator> showStatusAllElevator() {
+        return this.getMap().values();
     }
 
     public ConcurrentMap<Integer, Elevator> getMap() {

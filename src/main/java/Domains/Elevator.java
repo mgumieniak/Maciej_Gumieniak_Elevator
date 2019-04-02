@@ -92,6 +92,7 @@ public class Elevator implements ElevatorInterface{
     }
 
 
+    @Override
     public void updateAndStatusAndSimulationStep(){
         this.status();
         this.update();

@@ -1,89 +1,109 @@
 package Domains;
+
+import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
+
 
 public class Elevator implements ElevatorInterface{
 
     private final int id;
-    private int currentFlour;
-    private int destinationFlour;
-    private LinkedList<Integer> flourQue;
+    private final int currentFlour;
+    private final int destinationFlour;
+    private final List<Integer> flourQue;
 
 
-    public Elevator(int id, int currentFlour, int destinationFlour) {
+    private Elevator(int id, int currentFlour, int destinationFlour, List<Integer> list) {
         this.id = id;
         this.currentFlour = currentFlour;
         this.destinationFlour = destinationFlour;
-        this.flourQue = new LinkedList<>();
+        this.flourQue = Collections.unmodifiableList(new LinkedList<>(list));
     }
 
-    void helpForDestNegative(int flourReport){
+    public static Elevator createElevator(int id, int currentFlour, int destinationFlour, List<Integer> list){
+        return new Elevator(id, currentFlour, destinationFlour, list);
+    }
+
+    ElevatorInterface helpForDestNegative(int flourReport){
+        LinkedList<Integer> list= new LinkedList<>(this.getFlourQue());
         for(int i=0; i<this.getFlourQue().size(); i++){
             if(this.getFlourQue().get(i)<flourReport && (this.currentFlour - flourReport)>0){
-                this.getFlourQue().add(i,flourReport);
+                list.add(i,flourReport);
                 break;
             }else if(i == this.getFlourQue().size()-1){
-                this.getFlourQue().addLast(flourReport);
+                list.addLast(flourReport);
                 break;
             }
         }
+        return createElevator(getId(),getCurrentFlour(),getDestinationFlour(),list);
     }
 
-    void helpForDestPositive(int flourReport){
+    ElevatorInterface helpForDestPositive(int flourReport){
+        LinkedList<Integer> list= new LinkedList<>(this.getFlourQue());
         for(int i=0; i<this.getFlourQue().size(); i++){
             if(this.getFlourQue().get(i)>flourReport && (this.currentFlour - flourReport)<0){
-                this.getFlourQue().add(i,flourReport);
+                //this.getFlourQue().add(i,flourReport);
+                //break;
+                list.add(i,flourReport);
                 break;
             }else if(i == this.getFlourQue().size()-1){
-                this.getFlourQue().addLast(flourReport);
+                //this.getFlourQue().addLast(flourReport);
+               // break;
+                list.addLast(flourReport);
                 break;
             }
         }
+        return createElevator(getId(),getCurrentFlour(),getDestinationFlour(),list);
     }
 
     @Override
-    public void pickUpElevator(int flourReport, int destination){
-
-        if (destination != 0) {
+    public ElevatorInterface pickUpElevator(int flourReport, int destination){
+        LinkedList<Integer> list= new LinkedList<>(this.getFlourQue());
+        /*if (destination != 0) {
             System.out.println("pickUp on floor: "+flourReport+" direct: "+destination);
-        }
+        }*/
 
         if(this.getFlourQue().isEmpty()){
-            this.getFlourQue().add(flourReport);
+            list.add(flourReport);
         }else if(destination <0){
-            helpForDestNegative(flourReport);
+            return helpForDestNegative(flourReport);
         }else if(destination >0){
-            helpForDestPositive(flourReport);
+            return helpForDestPositive(flourReport);
         }else{ // desttination ==0
             if(this.getCurrentFlour()>flourReport){
-                helpForDestNegative(flourReport);
-            }else helpForDestPositive(flourReport);
+               return helpForDestNegative(flourReport);
+            }else return helpForDestPositive(flourReport);
         }
+        return createElevator(getId(),getCurrentFlour(),getDestinationFlour(),list);
     }
 
     @Override
-    public void selectFlourInsideElevator(int destinationFlour){
-        System.out.println("Select inside elevator floor: "+destinationFlour);
+    public ElevatorInterface selectFlourInsideElevator(int destinationFlour){
+        //System.out.println("Select inside elevator floor: "+destinationFlour);
         if(!this.getFlourQue().contains(destinationFlour)){
-            this.pickUpElevator(destinationFlour,0);
-        }
+            return pickUpElevator(destinationFlour,0);
+        }else return this;
     }
 
     @Override
-    public void update(){
-        if(this.getCurrentFlour() == this.getDestinationFlour()){
-            System.out.println("Floor: "+this.getCurrentFlour());
-            if(!(this.getFlourQue().isEmpty())){
-                this.setDestinationFlour(this.getFlourQue().removeFirst());
-            }
-        }
+    public ElevatorInterface update(){
+        if(this.getCurrentFlour() == this.getDestinationFlour() && !(this.getFlourQue().isEmpty())){
+            LinkedList<Integer> list= new LinkedList<>(this.getFlourQue());
+            int destinationFlour = list.removeFirst();
+            return createElevator(getId(),getCurrentFlour(),destinationFlour,list);
+        }else return this;
     }
 
     @Override
-    public void simulationStep(){
-        if(this.getDestinationFlour() == this.getCurrentFlour()){}
+    public ElevatorInterface simulationStep(){
+        if(this.getDestinationFlour() == this.getCurrentFlour()){return  this;}
         else if(this.getDestinationFlour() > this.getCurrentFlour()){
-            this.setCurrentFlour(this.getCurrentFlour()+1);
-        }else this.setCurrentFlour(this.getCurrentFlour()-1);
+            int currentFlour = this.getCurrentFlour()+1;
+            return createElevator(getId(),currentFlour,getDestinationFlour(),getFlourQue());
+        }else {
+            int currentFlour = this.getCurrentFlour()-1;
+            return createElevator(getId(),currentFlour,getDestinationFlour(),getFlourQue());
+        }
     }
 
     @Override
@@ -91,12 +111,11 @@ public class Elevator implements ElevatorInterface{
         System.out.println(this.toString());
     }
 
-
     @Override
-    public void updateAndStatusAndSimulationStep(){
-        this.status();
-        this.update();
-        this.simulationStep();
+    public ElevatorInterface updateAndSimulationStep(){
+        ElevatorInterface elevator = this.update();
+        elevator = elevator.simulationStep();
+        return elevator;
     }
 
     public int getId() {
@@ -112,16 +131,7 @@ public class Elevator implements ElevatorInterface{
     }
 
 
-    public void setCurrentFlour(int currentFlour) {
-        this.currentFlour = currentFlour;
-    }
-
-    public void setDestinationFlour(int destinationFlour) {
-        this.destinationFlour = destinationFlour;
-    }
-
-
-    public LinkedList<Integer> getFlourQue() {
+    public List<Integer> getFlourQue() {
         return flourQue;
     }
 

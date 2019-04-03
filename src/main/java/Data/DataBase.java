@@ -4,6 +4,7 @@ import Domains.Elevator;
 import Domains.ElevatorInterface;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -23,7 +24,7 @@ public class DataBase implements DataBaseInterface{
         }
     }
 
-    private ConcurrentMap<Integer, Elevator> map;
+    private ConcurrentHashMap<Integer, ElevatorInterface> map;
 
     public DataBase() {
         this.map = new ConcurrentHashMap<>();
@@ -34,15 +35,12 @@ public class DataBase implements DataBaseInterface{
         if (id < 0 || id >= numberElevator.NUMBERSSELEVATORS.getValue()) {
             throw new IllegalArgumentException("Id cannot be negative");
         }
-        if(map.get(id) == null){
-            map.putIfAbsent(id, new Elevator(id,0,0));
-        }else throw new IllegalArgumentException("Id exist");
-
+        map.putIfAbsent(id, Elevator.createElevator(id,0,0, List.of()));
     }
 
     @Override
-    public Elevator findElevatorUpById(int id) {
-        Elevator elevator = map.get(id);
+    public ElevatorInterface findElevatorUpById(int id) {
+        ElevatorInterface elevator = map.get(id);
         if(elevator == null){
             throw new IllegalArgumentException("Dont find elevator with id = "+id);
         }
@@ -50,11 +48,11 @@ public class DataBase implements DataBaseInterface{
     }
 
     @Override
-    public Collection<Elevator> showStatusAllElevator() {
+    public Collection<ElevatorInterface> showStatusAllElevator() {
         return this.getMap().values();
     }
 
-    public ConcurrentMap<Integer, Elevator> getMap() {
+    public ConcurrentHashMap<Integer, ElevatorInterface> getMap() {
         return map;
     }
 

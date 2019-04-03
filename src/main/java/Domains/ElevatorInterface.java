@@ -1,15 +1,16 @@
 package Domains;
 
-import java.util.LinkedList;
+
+import java.util.List;
 
 public interface ElevatorInterface {
-    void pickUpElevator(int flourReport, int destination);
-    void selectFlourInsideElevator(int destinationFlour);
-    void update();
-    void simulationStep();
+    ElevatorInterface pickUpElevator(int flourReport, int destination);
+    ElevatorInterface selectFlourInsideElevator(int destinationFlour);
+    ElevatorInterface update();
+    ElevatorInterface simulationStep();
     void status();
-    void updateAndStatusAndSimulationStep();
+    ElevatorInterface updateAndSimulationStep();
     int  getCurrentFlour();
     int getDestinationFlour();
-    LinkedList<Integer> getFlourQue();
+    List<Integer> getFlourQue();
 }

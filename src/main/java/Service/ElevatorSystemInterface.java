@@ -1,9 +1,14 @@
 package Service;
 
-public interface ElevatorSystemInterface {
-    void pickUpAcction(int id, int direct);
-    void step();
-    void showElevatorStatusById(int id);
-    void showAllElevatorStatus();
+import Domains.ElevatorInterface;
 
+import java.util.Collection;
+import java.util.concurrent.TimeUnit;
+
+public interface ElevatorSystemInterface {
+    void systemShutDown(long timeout, TimeUnit unit);
+    void submitProducer(Producer producer);
+    void submitConsumer(Consumer consumer, int numberOfSubmit);
+    Collection<ElevatorInterface> showStatusAllElevator();
+    void updateAndSimulationStep(int idElevator, int numberOfSubmit);
 }

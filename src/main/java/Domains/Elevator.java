@@ -6,114 +6,189 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Elevator class implements ElevatorInterface
+ * Immutable Elevator class implements ElevatorInterface. Each object contain four
+ * private fields: id - unique int which specific object, currentFloor - current floor,
+ * destinationFloor - current destination floor and FloorQue - list of flours, which
+ * clients pick up elevator or select inside.
+ *
+ * Elevator class is immutable, so each changes lead to create new class instance
+ * which modified fields.
+ *
+ * The purpose of the class is to ensure property handle incoming orders for elevator
+ * ( in specific order). For example: If sb inside elevator select 7 floor and sb pick
+ * up elevator on floor 4 to go up. The data will be put in list in order: [4,7]. If
+ * sb pick up elevator on floor 4 to go down then the order in list will be: [7,4].
+ *
+ * Otherwise class contains method to simulate elevator movement (increasing/decreasing
+ * actual floor) with selecting current floor from FloorQue.
  */
 public class Elevator implements ElevatorInterface{
 
     private final int id;
-    private final int currentFlour;
-    private final int destinationFlour;
-    private final List<Integer> flourQue;
+    private final int currentFloor;
+    private final int destinationFloor;
+    private final List<Integer> FloorQue;
 
-
-    private Elevator(int id, int currentFlour, int destinationFlour, List<Integer> list) {
+    /**
+     * Private class constructor.
+     *
+     * @param id - unique int which specific object.
+     * @param currentFloor - current floor.
+     * @param destinationFloor - current destination floor.
+     * @param list - list of flours, which clients pick up elevator or select inside.
+     */
+    private Elevator(int id, int currentFloor, int destinationFloor, List<Integer> list) {
         this.id = id;
-        this.currentFlour = currentFlour;
-        this.destinationFlour = destinationFlour;
-        this.flourQue = Collections.unmodifiableList(new LinkedList<>(list));
+        this.currentFloor = currentFloor;
+        this.destinationFloor = destinationFloor;
+        this.FloorQue = Collections.unmodifiableList(new LinkedList<>(list));
     }
 
-    public static Elevator createElevator(int id, int currentFlour, int destinationFlour, List<Integer> list){
-        return new Elevator(id, currentFlour, destinationFlour, list);
+    /**
+     * Static factory method, which produce the objects.
+     *
+     * @param id - unique int which specific object.
+     * @param currentFloor - current floor.
+     * @param destinationFloor - current destination floor.
+     * @param list - list of flours, which clients pick up elevator or select inside.
+     * @return the produced class object.
+     */
+    public static Elevator createElevator(int id, int currentFloor, int destinationFloor, List<Integer> list){
+        return new Elevator(id, currentFloor, destinationFloor, list);
     }
 
-    private Elevator helpForDestNegative(int flourReport){
-        LinkedList<Integer> list= new LinkedList<>(this.getFlourQue());
-        for(int i=0; i<this.getFlourQue().size(); i++){
-            if(this.getFlourQue().get(i)<flourReport && (this.currentFlour - flourReport)>0){
-                list.add(i,flourReport);
+    /**
+     * Help method handle ordering incoming task when destination is negative.
+     * The position new task in FloorQue depends from the actual destination elevator
+     * and destination of pick up. Example:
+     * When elevator go up to floor nb 5 and sb pick up 2 to go down, the FloorQue looks
+     * like [5,2], but sb immediately pick up 3 to go down. The FloorQue should looks like
+     * [5,3,2]. That is why we have to use for loop to specific appropriate FloorQue.
+     *
+     *
+     * @param floorReport - floor on which sb pick up elevator.
+     * @return modified class instance.
+     */
+    private Elevator helpForDestNegative(int floorReport){
+        LinkedList<Integer> list= new LinkedList<>(this.getFloorQue());
+        for(int i=0; i<this.getFloorQue().size(); i++){
+            if(this.getFloorQue().get(i)<floorReport && (this.currentFloor - floorReport)>0){
+                list.add(i,floorReport);
                 break;
-            }else if(i == this.getFlourQue().size()-1){
-                list.addLast(flourReport);
+            }else if(i == this.getFloorQue().size()-1){
+                list.addLast(floorReport);
                 break;
             }
         }
-        return createElevator(getId(),getCurrentFlour(),getDestinationFlour(),list);
+        return createElevator(getId(),getcurrentFloor(),getdestinationFloor(),list);
     }
 
-    private Elevator helpForDestPositive(int flourReport){
-        LinkedList<Integer> list= new LinkedList<>(this.getFlourQue());
-        for(int i=0; i<this.getFlourQue().size(); i++){
-            if(this.getFlourQue().get(i)>flourReport && (this.currentFlour - flourReport)<0){
-                //this.getFlourQue().add(i,flourReport);
-                //break;
-                list.add(i,flourReport);
+    /**
+     * Handle ordering incoming task when destination is positive. The causes creating are
+     * the same like in method helpForDestNegative.
+     *
+     * @param floorReport - floor on which sb pick up elevator.
+     * @return modified class instance.
+     */
+    private Elevator helpForDestPositive(int floorReport){
+        LinkedList<Integer> list= new LinkedList<>(this.getFloorQue());
+        for(int i=0; i<this.getFloorQue().size(); i++){
+            if(this.getFloorQue().get(i)>floorReport && (this.currentFloor - floorReport)<0){
+                list.add(i,floorReport);
                 break;
-            }else if(i == this.getFlourQue().size()-1){
-                //this.getFlourQue().addLast(flourReport);
-               // break;
-                list.addLast(flourReport);
+            }else if(i == this.getFloorQue().size()-1){
+                list.addLast(floorReport);
                 break;
             }
         }
-        return createElevator(getId(),getCurrentFlour(),getDestinationFlour(),list);
+        return createElevator(getId(),getcurrentFloor(),getdestinationFloor(),list);
     }
 
+    /**
+     * Method handle pick up the elevator from specific floor and direction. Beside add
+     * appropriate new task (floor) in FloorQue using helpForDestPositive and helpForDestNegative.
+     *
+     * @param floorReport - the floor from sb call the elevator.
+     * @param direction - direction in which sb want to go by elevator. The positive value
+     *                  means up direction and negative value means down direction.
+     * @return modified class instance.
+     */
     @Override
-    public Elevator pickUpElevator(int flourReport, int direction){
-        LinkedList<Integer> list= new LinkedList<>(this.getFlourQue());
-        /*if (destination != 0) {
-            System.out.println("pickUp on floor: "+flourReport+" direct: "+destination);
-        }*/
+    public Elevator pickUpElevator(int floorReport, int direction){
+        LinkedList<Integer> list= new LinkedList<>(this.getFloorQue());
 
-        if(this.getFlourQue().isEmpty()){
-            list.add(flourReport);
+        if(this.getFloorQue().isEmpty()){
+            list.add(floorReport);
         }else if(direction <0){
-            return helpForDestNegative(flourReport);
+            return helpForDestNegative(floorReport);
         }else if(direction >0){
-            return helpForDestPositive(flourReport);
+            return helpForDestPositive(floorReport);
         }else{ // direction ==0
-            if(this.getCurrentFlour()>flourReport){
-               return helpForDestNegative(flourReport);
-            }else return helpForDestPositive(flourReport);
+            if(this.getcurrentFloor()>floorReport){
+               return helpForDestNegative(floorReport);
+            }else return helpForDestPositive(floorReport);
         }
-        return createElevator(getId(),getCurrentFlour(),getDestinationFlour(),list);
+        return createElevator(getId(),getcurrentFloor(),getdestinationFloor(),list);
     }
 
+    /**
+     * Method handle select floor inside elevator using pickUpElevator with direction = 0.
+     * 
+     * @param destinationFloor - destination floor, selected inside elevator.
+     * @return modified class instance.
+     */
     @Override
-    public Elevator selectFlourInsideElevator(int destinationFlour){
-        //System.out.println("Select inside elevator floor: "+destinationFlour);
-        if(!this.getFlourQue().contains(destinationFlour)){
-            return pickUpElevator(destinationFlour,0);
+    public Elevator selectFlourInsideElevator(int destinationFloor){
+        if(!this.getFloorQue().contains(destinationFloor)){
+            return pickUpElevator(destinationFloor,0);
         }else return this;
     }
 
+    /**
+     * Update queue value. When current floor is equal actual floor take first
+     * element form floorQueue (return and remove).
+     *
+     * @return modified class instance.
+     */
     @Override
     public Elevator update(){
-        if(this.getCurrentFlour() == this.getDestinationFlour() && !(this.getFlourQue().isEmpty())){
-            LinkedList<Integer> list= new LinkedList<>(this.getFlourQue());
-            int destinationFlour = list.removeFirst();
-            return createElevator(getId(),getCurrentFlour(),destinationFlour,list);
+        if(this.getcurrentFloor() == this.getdestinationFloor() && !(this.getFloorQue().isEmpty())){
+            LinkedList<Integer> list= new LinkedList<>(this.getFloorQue());
+            int destinationFloor = list.removeFirst();
+            return createElevator(getId(),getcurrentFloor(),destinationFloor,list);
         }else return this;
     }
 
+    /**
+     * Simulate elevator movement increasing or decreasing current floor by 1.
+     *
+     * @return modified class instance.
+     */
     @Override
     public Elevator simulationStep(){
-        if(this.getDestinationFlour() == this.getCurrentFlour()){return  this;}
-        else if(this.getDestinationFlour() > this.getCurrentFlour()){
-            int currentFlour = this.getCurrentFlour()+1;
-            return createElevator(getId(),currentFlour,getDestinationFlour(),getFlourQue());
+        if(this.getdestinationFloor() == this.getcurrentFloor()){return  this;}
+        else if(this.getdestinationFloor() > this.getcurrentFloor()){
+            int currentFloor = this.getcurrentFloor()+1;
+            return createElevator(getId(),currentFloor,getdestinationFloor(),getFloorQue());
         }else {
-            int currentFlour = this.getCurrentFlour()-1;
-            return createElevator(getId(),currentFlour,getDestinationFlour(),getFlourQue());
+            int currentFloor = this.getcurrentFloor()-1;
+            return createElevator(getId(),currentFloor,getdestinationFloor(),getFloorQue());
         }
     }
 
+    /**
+     * Show all information about instance fields.
+     */
     @Override
     public void status(){
         System.out.println(this.toString());
     }
 
+    /**
+     * Help method to call method update() and simulationStep().
+     *
+     * @return modified class instance.
+     */
     @Override
     public Elevator updateAndSimulationStep(){
         Elevator elevator = this.update();
@@ -121,29 +196,44 @@ public class Elevator implements ElevatorInterface{
         return elevator;
     }
 
+    /**
+     *
+     * @return object id.
+     */
     public int getId() {
         return id;
     }
 
-    public int getCurrentFlour() {
-        return currentFlour;
+    /**
+     *
+     * @return object current floor.
+     */
+    public int getcurrentFloor() {
+        return currentFloor;
     }
 
-    public int getDestinationFlour() {
-        return destinationFlour;
+    /**
+     *
+     * @return object destination floor.
+     */
+    public int getdestinationFloor() {
+        return destinationFloor;
     }
 
-
-    public List<Integer> getFlourQue() {
-        return flourQue;
+    /**
+     *
+     * @return object floor que.
+     */
+    public List<Integer> getFloorQue() {
+        return FloorQue;
     }
 
     @Override
     public String toString() {
         return "Elevator{ id=" + id +
-                ", currentFlour=" + currentFlour +
-                ", destinationFlour=" + destinationFlour +
-                "} "+this.getFlourQue();
+                ", currentFloor=" + currentFloor +
+                ", destinationFloor=" + destinationFloor +
+                "} "+this.getFloorQue();
     }
 
     @Override
@@ -152,13 +242,13 @@ public class Elevator implements ElevatorInterface{
         if (o == null || getClass() != o.getClass()) return false;
         Elevator elevator = (Elevator) o;
         return getId() == elevator.getId() &&
-                getCurrentFlour() == elevator.getCurrentFlour() &&
-                getDestinationFlour() == elevator.getDestinationFlour() &&
-                Objects.equals(getFlourQue(), elevator.getFlourQue());
+                getcurrentFloor() == elevator.getcurrentFloor() &&
+                getdestinationFloor() == elevator.getdestinationFloor() &&
+                Objects.equals(getFloorQue(), elevator.getFloorQue());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getCurrentFlour(), getDestinationFlour(), getFlourQue());
+        return Objects.hash(getId(), getcurrentFloor(), getdestinationFloor(), getFloorQue());
     }
 }

@@ -17,23 +17,35 @@ public interface ElevatorInterface {
     /**
      * Method handle select floor inside elevator.
      *
-     * @param destinationFlour - destinationFlour
+     * @param destinationFlour - destination floor
      * @return object with modify value
      */
     ElevatorInterface selectFlourInsideElevator(int destinationFlour);
 
     /**
-     * Update queue value.
+     * Update queue value. When current floor is equal actual floor take first
+     * element form floorQueue (return and remove).
      *
      * @return object with modify value
      */
     ElevatorInterface update();
 
     /**
+     * Simulate elevator movement increasing or decreasing current floor by 1.
      *
-     * @return object with modify value
+     * @return object with modify value.
      */
     ElevatorInterface simulationStep();
+
+    /**
+     * Show all information about instance fields.
+     */
     void status();
+
+    /**
+     * Help method to call method update() and simulationStep().
+     *
+     * @return modify object.
+     */
     ElevatorInterface updateAndSimulationStep();
 }

@@ -12,20 +12,23 @@ import java.util.concurrent.*;
 public class Main {
     public static void main(String[] args){
         DataBase data = Main.init();
-        BlockingQueue<Message> queue = new ArrayBlockingQueue<>(20);
+
+        ElevatorSystem elevatorSystem = new ElevatorSystem(Runtime.getRuntime().availableProcessors(),
+                data, new PriorityBlockingQueue<>(20, (first,second)->second.getIdElevator()-first.getIdElevator()));
 
 
-        ElevatorSystem elevatorSystem = new ElevatorSystem(Runtime.getRuntime().availableProcessors(),data);
+        elevatorSystem.selectFlourInsideElevator(1,3);
+        elevatorSystem.pickUpElevator(1,2,-1);
+        elevatorSystem.selectFlourInsideElevator(2,5);
 
-        elevatorSystem.submitProducer(new Producer(queue,1,3,0,true));
-        elevatorSystem.submitProducer(new Producer(queue,1,2,-1,false));
-        elevatorSystem.submitConsumer(new Consumer(queue,data),2);
+        elevatorSystem.receiveData(3);
+
 
         elevatorSystem.systemShutDown(10,TimeUnit.SECONDS);
 
-        elevatorSystem.updateAndSimulationStep(1,2);
+        elevatorSystem.updateAndSimulationStep(1,4);
+        elevatorSystem.updateAndSimulationStep(2,4);
         System.out.println("Data status: " + elevatorSystem.showStatusAllElevator());
-
     }
 
     public static DataBase init(){

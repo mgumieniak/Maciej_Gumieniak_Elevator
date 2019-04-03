@@ -1,5 +1,7 @@
 package Domains;
 
+import java.util.Objects;
+
 public class Message {
     private final int idElevator;
     private final int destinationFloor;
@@ -40,5 +42,21 @@ public class Message {
                 ", direction=" + direction +
                 ", selectInsideElevator=" + selectInsideElevator +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Message message = (Message) o;
+        return getIdElevator() == message.getIdElevator() &&
+                getDestinationFloor() == message.getDestinationFloor() &&
+                getDirection() == message.getDirection() &&
+                isSelectInsideElevator() == message.isSelectInsideElevator();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getIdElevator(), getDestinationFloor(), getDirection(), isSelectInsideElevator());
     }
 }

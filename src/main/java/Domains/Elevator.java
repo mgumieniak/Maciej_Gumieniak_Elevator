@@ -3,8 +3,11 @@ package Domains;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
-
+/**
+ * Elevator class implements ElevatorInterface
+ */
 public class Elevator implements ElevatorInterface{
 
     private final int id;
@@ -24,7 +27,7 @@ public class Elevator implements ElevatorInterface{
         return new Elevator(id, currentFlour, destinationFlour, list);
     }
 
-    ElevatorInterface helpForDestNegative(int flourReport){
+    private Elevator helpForDestNegative(int flourReport){
         LinkedList<Integer> list= new LinkedList<>(this.getFlourQue());
         for(int i=0; i<this.getFlourQue().size(); i++){
             if(this.getFlourQue().get(i)<flourReport && (this.currentFlour - flourReport)>0){
@@ -38,7 +41,7 @@ public class Elevator implements ElevatorInterface{
         return createElevator(getId(),getCurrentFlour(),getDestinationFlour(),list);
     }
 
-    ElevatorInterface helpForDestPositive(int flourReport){
+    private Elevator helpForDestPositive(int flourReport){
         LinkedList<Integer> list= new LinkedList<>(this.getFlourQue());
         for(int i=0; i<this.getFlourQue().size(); i++){
             if(this.getFlourQue().get(i)>flourReport && (this.currentFlour - flourReport)<0){
@@ -57,7 +60,7 @@ public class Elevator implements ElevatorInterface{
     }
 
     @Override
-    public ElevatorInterface pickUpElevator(int flourReport, int destination){
+    public Elevator pickUpElevator(int flourReport, int direction){
         LinkedList<Integer> list= new LinkedList<>(this.getFlourQue());
         /*if (destination != 0) {
             System.out.println("pickUp on floor: "+flourReport+" direct: "+destination);
@@ -65,11 +68,11 @@ public class Elevator implements ElevatorInterface{
 
         if(this.getFlourQue().isEmpty()){
             list.add(flourReport);
-        }else if(destination <0){
+        }else if(direction <0){
             return helpForDestNegative(flourReport);
-        }else if(destination >0){
+        }else if(direction >0){
             return helpForDestPositive(flourReport);
-        }else{ // desttination ==0
+        }else{ // direction ==0
             if(this.getCurrentFlour()>flourReport){
                return helpForDestNegative(flourReport);
             }else return helpForDestPositive(flourReport);
@@ -78,7 +81,7 @@ public class Elevator implements ElevatorInterface{
     }
 
     @Override
-    public ElevatorInterface selectFlourInsideElevator(int destinationFlour){
+    public Elevator selectFlourInsideElevator(int destinationFlour){
         //System.out.println("Select inside elevator floor: "+destinationFlour);
         if(!this.getFlourQue().contains(destinationFlour)){
             return pickUpElevator(destinationFlour,0);
@@ -86,7 +89,7 @@ public class Elevator implements ElevatorInterface{
     }
 
     @Override
-    public ElevatorInterface update(){
+    public Elevator update(){
         if(this.getCurrentFlour() == this.getDestinationFlour() && !(this.getFlourQue().isEmpty())){
             LinkedList<Integer> list= new LinkedList<>(this.getFlourQue());
             int destinationFlour = list.removeFirst();
@@ -95,7 +98,7 @@ public class Elevator implements ElevatorInterface{
     }
 
     @Override
-    public ElevatorInterface simulationStep(){
+    public Elevator simulationStep(){
         if(this.getDestinationFlour() == this.getCurrentFlour()){return  this;}
         else if(this.getDestinationFlour() > this.getCurrentFlour()){
             int currentFlour = this.getCurrentFlour()+1;
@@ -112,8 +115,8 @@ public class Elevator implements ElevatorInterface{
     }
 
     @Override
-    public ElevatorInterface updateAndSimulationStep(){
-        ElevatorInterface elevator = this.update();
+    public Elevator updateAndSimulationStep(){
+        Elevator elevator = this.update();
         elevator = elevator.simulationStep();
         return elevator;
     }
@@ -141,5 +144,21 @@ public class Elevator implements ElevatorInterface{
                 ", currentFlour=" + currentFlour +
                 ", destinationFlour=" + destinationFlour +
                 "} "+this.getFlourQue();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Elevator elevator = (Elevator) o;
+        return getId() == elevator.getId() &&
+                getCurrentFlour() == elevator.getCurrentFlour() &&
+                getDestinationFlour() == elevator.getDestinationFlour() &&
+                Objects.equals(getFlourQue(), elevator.getFlourQue());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getCurrentFlour(), getDestinationFlour(), getFlourQue());
     }
 }

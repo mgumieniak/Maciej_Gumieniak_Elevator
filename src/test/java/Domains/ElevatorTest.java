@@ -23,23 +23,23 @@ class ElevatorTest {
 
     @Test
     void removeOrdersFromQueueWhenElevatorReachTheFloor(){
-        ElevatorInterface elevator = Elevator.createElevator(1,0,0, List.of());
+        Elevator elevator = Elevator.createElevator(1,0,0, List.of());
 
         elevator = elevator.selectFlourInsideElevator(1);
         elevator = elevator.selectFlourInsideElevator(2);
-        ElevatorInterface finalElevator = elevator;
+        Elevator finalElevator = elevator;
         assertAll(
                 ()->assertEquals(2,  finalElevator.getFlourQue().size())
         );
 
         elevator = elevator.updateAndSimulationStep();// 1 F
-        ElevatorInterface finalElevator1 = elevator;
+        Elevator finalElevator1 = elevator;
         assertAll(
                 ()->assertEquals(1, finalElevator1.getFlourQue().size())
         );
 
         elevator = elevator.updateAndSimulationStep(); // 2 F
-        ElevatorInterface finalElevator2 = elevator;
+        Elevator finalElevator2 = elevator;
         assertAll(
                 ()->assertEquals(0, finalElevator2.getFlourQue().size())
         );
@@ -47,21 +47,21 @@ class ElevatorTest {
 
     @Test
     void stopElevatorWhenReachFloorAndNothingWillBeInQueue(){
-        ElevatorInterface elevator = Elevator.createElevator(1,0,0, List.of());
+        Elevator elevator = Elevator.createElevator(1,0,0, List.of());
 
         elevator=elevator.selectFlourInsideElevator(1);
         elevator=elevator.updateAndSimulationStep();// 1 F
-        ElevatorInterface finalElevator = elevator;
+        Elevator finalElevator = elevator;
         assertAll(
                 ()->assertEquals(1, finalElevator.getCurrentFlour())
         );
         elevator = elevator.updateAndSimulationStep();// 1 F
-        ElevatorInterface finalElevator1 = elevator;
+        Elevator finalElevator1 = elevator;
         assertAll(
                 ()->assertEquals(1, finalElevator1.getCurrentFlour())
         );
         elevator = elevator.updateAndSimulationStep();// 1 F
-        ElevatorInterface finalElevator2 = elevator;
+        Elevator finalElevator2 = elevator;
         assertAll(
                 ()->assertEquals(1, finalElevator2.getCurrentFlour())
         );
@@ -69,18 +69,18 @@ class ElevatorTest {
 
     @Test
     void methodI7_P2U(){
-        ElevatorInterface elevator = Elevator.createElevator(1,0,0, List.of());
+        Elevator elevator = Elevator.createElevator(1,0,0, List.of());
 
         elevator=elevator.selectFlourInsideElevator(7);
         elevator=elevator.pickUpElevator(2,1);
-        ElevatorInterface finalElevator = elevator;
+        Elevator finalElevator = elevator;
         assertAll(
                 ()->assertEquals(new LinkedList<Integer>(Arrays.asList(2,7)),
                         finalElevator.getFlourQue())
         );
         elevator = elevator.updateAndSimulationStep();// 1 F
         elevator = elevator.updateAndSimulationStep();// 2 F
-        ElevatorInterface finalElevator1 = elevator;
+        Elevator finalElevator1 = elevator;
         assertAll(
                 ()->assertEquals(2, finalElevator1.getCurrentFlour())
         );
@@ -88,11 +88,11 @@ class ElevatorTest {
 
     @Test
     void methodI7_P2D(){
-        ElevatorInterface elevator = Elevator.createElevator(1,0,0, List.of());
+        Elevator elevator = Elevator.createElevator(1,0,0, List.of());
 
         elevator = elevator.selectFlourInsideElevator(7);
         elevator = elevator.pickUpElevator(2,-1);
-        ElevatorInterface finalElevator = elevator;
+        Elevator finalElevator = elevator;
         assertAll(
                 ()->assertEquals(new LinkedList<Integer>(Arrays.asList(7,2)),
                         finalElevator.getFlourQue())
@@ -101,7 +101,7 @@ class ElevatorTest {
         elevator = elevator.updateAndSimulationStep();// 2 F
         elevator = elevator.updateAndSimulationStep();// 3 F
         elevator = elevator.updateAndSimulationStep();// 4 F
-        ElevatorInterface finalElevator1 = elevator;
+        Elevator finalElevator1 = elevator;
         assertAll(
                 ()->assertEquals(4, finalElevator1.getCurrentFlour())
         );
@@ -109,11 +109,11 @@ class ElevatorTest {
 
     @Test
     void methodI2_P7D(){
-        ElevatorInterface elevator = Elevator.createElevator(1,0,0, List.of());
+        Elevator elevator = Elevator.createElevator(1,0,0, List.of());
 
         elevator = elevator.selectFlourInsideElevator(2);
         elevator = elevator.pickUpElevator(7,-1);
-        ElevatorInterface finalElevator = elevator;
+        Elevator finalElevator = elevator;
         assertAll(
                 ()->assertEquals(new LinkedList<Integer>(Arrays.asList(2,7)),
                         finalElevator.getFlourQue())
@@ -121,43 +121,43 @@ class ElevatorTest {
         elevator = elevator.updateAndSimulationStep();// 1 F
         elevator = elevator.updateAndSimulationStep();// 2 F
         elevator = elevator.updateAndSimulationStep();// 3 F
-        ElevatorInterface finalElevator1 = elevator;
+        Elevator finalElevator1 = elevator;
         assertAll(
-                ()->assertEquals(4, finalElevator1.getCurrentFlour()),
+                ()->assertEquals(3, finalElevator1.getCurrentFlour()),
                 ()->assertEquals(7, finalElevator1.getDestinationFlour())
         );
     }
 
     @Test
     void methodI2_P7U(){
-        ElevatorInterface elevator = Elevator.createElevator(1,0,0, List.of());
+        Elevator elevator = Elevator.createElevator(1,0,0, List.of());
 
         elevator = elevator.selectFlourInsideElevator(2);
         elevator = elevator.pickUpElevator(7,1);
-        ElevatorInterface finalElevator = elevator;
+        Elevator finalElevator = elevator;
         assertAll(
                 ()->assertEquals(new LinkedList<Integer>(Arrays.asList(2,7)),
                         finalElevator.getFlourQue())
         );
         elevator = elevator.updateAndSimulationStep();// 1 F
         elevator = elevator.updateAndSimulationStep();// 2 F
-        ElevatorInterface finalElevator1 = elevator;
+        Elevator finalElevator1 = elevator;
         assertAll(
                 ()->assertEquals(2, finalElevator1.getCurrentFlour()),
                 ()->assertEquals(2, finalElevator1.getDestinationFlour()),
-                ()->assertEquals(new LinkedList<Integer>(Arrays.asList(7)),
+                ()->assertEquals(new LinkedList<>(Arrays.asList(7)),
                         finalElevator1.getFlourQue())
         );
     }
 
     @Test
     void methodI2_I7_P1U(){
-        ElevatorInterface elevator = Elevator.createElevator(1,0,0, List.of());
+        Elevator elevator = Elevator.createElevator(1,0,0, List.of());
 
         elevator = elevator.selectFlourInsideElevator(2);
         elevator = elevator.selectFlourInsideElevator(7);
         elevator = elevator.pickUpElevator(1,1);
-        ElevatorInterface finalElevator = elevator;
+        Elevator finalElevator = elevator;
         assertAll(
                 ()->assertEquals(new LinkedList<Integer>(Arrays.asList(1,2,7)),
                         finalElevator.getFlourQue())
@@ -166,12 +166,12 @@ class ElevatorTest {
 
     @Test
     void methodI2_I7_P1D(){
-        ElevatorInterface elevator = Elevator.createElevator(1,0,0, List.of());
+        Elevator elevator = Elevator.createElevator(1,0,0, List.of());
 
         elevator = elevator.selectFlourInsideElevator(2);
         elevator = elevator.selectFlourInsideElevator(7);
         elevator = elevator.pickUpElevator(1,-1);
-        ElevatorInterface finalElevator = elevator;
+        Elevator finalElevator = elevator;
         assertAll(
                 ()->assertEquals(new LinkedList<Integer>(Arrays.asList(2,7,1)),
                         finalElevator.getFlourQue())
@@ -180,12 +180,12 @@ class ElevatorTest {
 
     @Test
     void methodI7_I2_P1U(){
-        ElevatorInterface elevator = Elevator.createElevator(1,0,0, List.of());
+        Elevator elevator = Elevator.createElevator(1,0,0, List.of());
 
         elevator = elevator.selectFlourInsideElevator(7);
         elevator = elevator.selectFlourInsideElevator(2);
         elevator = elevator.pickUpElevator(1,1);
-        ElevatorInterface finalElevator = elevator;
+        Elevator finalElevator = elevator;
         assertAll(
                 ()->assertEquals(new LinkedList<Integer>(Arrays.asList(1,2,7)),
                         finalElevator.getFlourQue())
@@ -194,12 +194,12 @@ class ElevatorTest {
 
     @Test
     void methodI7_I2_P1D(){
-        ElevatorInterface elevator = Elevator.createElevator(1,0,0, List.of());
+        Elevator elevator = Elevator.createElevator(1,0,0, List.of());
 
         elevator = elevator.selectFlourInsideElevator(7);
         elevator = elevator.selectFlourInsideElevator(2);
         elevator = elevator.pickUpElevator(1,-1);
-        ElevatorInterface finalElevator = elevator;
+        Elevator finalElevator = elevator;
         assertAll(
                 ()->assertEquals(new LinkedList<Integer>(Arrays.asList(2,7,1)),
                         finalElevator.getFlourQue())
@@ -208,13 +208,13 @@ class ElevatorTest {
 
     @Test
     void methodI1_I2_P1D(){
-        ElevatorInterface elevator = Elevator.createElevator(1,0,0, List.of());
+        Elevator elevator = Elevator.createElevator(1,0,0, List.of());
 
         elevator = elevator.selectFlourInsideElevator(1);
         elevator = elevator.updateAndSimulationStep(); // 1 F
         elevator = elevator.selectFlourInsideElevator(2);
         elevator = elevator.pickUpElevator(1,-1);
-        ElevatorInterface finalElevator = elevator;
+        Elevator finalElevator = elevator;
         assertAll(
                 ()->assertEquals(new LinkedList<Integer>(Arrays.asList(2,1)),
                         finalElevator.getFlourQue())
@@ -223,7 +223,7 @@ class ElevatorTest {
         elevator = elevator.updateAndSimulationStep(); // 1 F
         elevator = elevator.updateAndSimulationStep(); // 2 F
         elevator = elevator.updateAndSimulationStep(); // 1 F
-        ElevatorInterface finalElevator1 = elevator;
+        Elevator finalElevator1 = elevator;
         assertAll(
                 ()->assertEquals(0, finalElevator1.getFlourQue().size()),
                 ()->assertEquals(1, finalElevator1.getCurrentFlour()),
@@ -234,7 +234,7 @@ class ElevatorTest {
 
     @Test
     void methodI2_Step_P5D_P4U_Step_P3U(){
-        ElevatorInterface elevator = Elevator.createElevator(1,0,0, List.of());
+        Elevator elevator = Elevator.createElevator(1,0,0, List.of());
 
         elevator = elevator.selectFlourInsideElevator(2);
         elevator = elevator.updateAndSimulationStep(); // 1 F
@@ -246,7 +246,7 @@ class ElevatorTest {
         elevator = elevator.updateAndSimulationStep(); // 3 F
         elevator = elevator.updateAndSimulationStep(); // 4 F
         elevator = elevator.updateAndSimulationStep(); // 5 F
-        ElevatorInterface finalElevator = elevator;
+        Elevator finalElevator = elevator;
         assertAll(
                 ()->assertEquals(0, finalElevator.getFlourQue().size())
         );

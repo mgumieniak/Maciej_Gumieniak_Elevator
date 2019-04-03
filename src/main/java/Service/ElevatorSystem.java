@@ -3,6 +3,8 @@ package Service;
 import Data.DataBase;
 import Data.DataBaseInterface;
 import Domains.ElevatorInterface;
+import Domains.Message;
+
 import java.util.Collection;
 import java.util.concurrent.*;
 
@@ -10,21 +12,31 @@ public class ElevatorSystem implements ElevatorSystemInterface{
 
     private int processors;
     private ExecutorService executorService;
-    private DataBase data;
+    private DataBase dataBase;
+    BlockingQueue<Message> queue;
 
-    public ElevatorSystem(int processors, DataBase data) { ;
+    public ElevatorSystem(int processors, DataBase data,BlockingQueue<Message> queue) {
         this.processors = processors;
         this.executorService = Executors.newFixedThreadPool(processors);
-        this.data = data;
+        this.dataBase = data;
+        this.queue = queue;
     }
 
     @Override
-    public void submitProducer(Producer producer) {
+    public void pickUpElevator(int idElevator, int flourReport, int direction) {
+        Producer producer = new Producer(getQueue(),idElevator, flourReport,direction,false);
         getExecutorService().submit(producer.getRunnableProducer());
     }
 
     @Override
-    public void submitConsumer(Consumer consumer, int numberOfSubmit) {
+    public void selectFlourInsideElevator(int idElevator, int destinationFlour) {
+        Producer producer = new Producer(getQueue(),idElevator, destinationFlour,0,true);
+        getExecutorService().submit(producer.getRunnableProducer());
+    }
+
+    @Override
+    public void receiveData(int numberOfSubmit) {
+        Consumer consumer = new Consumer(getQueue(),getData());
         for(int i=0; i<numberOfSubmit; i++){
             getExecutorService().submit(consumer.getRunnableConsumer());
         }
@@ -32,13 +44,13 @@ public class ElevatorSystem implements ElevatorSystemInterface{
 
     @Override
     public Collection<ElevatorInterface> showStatusAllElevator() {
-        return data.showStatusAllElevator();
+        return dataBase.showStatusAllElevator();
     }
 
     @Override
     public void updateAndSimulationStep(int idElevator, int numberOfSubmit) {
         for(int i=0; i<numberOfSubmit; i++){
-            data.getMap().computeIfPresent(idElevator,(id,elevator)->elevator.updateAndSimulationStep());
+            dataBase.getMap().computeIfPresent(idElevator,(id,elevator)->elevator.updateAndSimulationStep());
         }
     }
 
@@ -55,11 +67,16 @@ public class ElevatorSystem implements ElevatorSystemInterface{
         }
     }
 
+
     public ExecutorService getExecutorService() {
         return executorService;
     }
 
     public DataBase getData() {
-        return data;
+        return dataBase;
+    }
+
+    public BlockingQueue<Message> getQueue() {
+        return queue;
     }
 }

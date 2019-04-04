@@ -44,7 +44,11 @@ Below example ensure, that elevator with higher id will be handled first.
 More Example:
 * *new ElevatorSystem(...,..., new PriorityBlockingQueue<>(20));* // The head of the queue is that element that has to lower id. 
 * *new ElevatorSystem(...,..., new ArrayBlockingQueue<>(20));* // The head of the queue is that element that has been on the queue the longest time.
-* *new ElevatorSystem(...,..., new PriorityBlockingQueue<>(20, (first,second)-> Math.abs(data.findObjectById(first.getIdElevator()).getCurrentFloor()data.findObjectById(first.getIdElevator()).getDestinationFloor()) -Math.abs(data.findObjectById(second.getIdElevator()).getCurrentFloor()data.findObjectById(second.getIdElevator()).getDestinationFloor())));*  // The head of the queue is that element that has the biggest way. Reverse the order 
+* *new ElevatorSystem(...,..., new PriorityBlockingQueue<>(20, (first,second)-> Math.abs(data.findObjectById(first.getIdElevator()).getCurrentFloor()data.findObjectById(first.getIdElevator()).getDestinationFloor()) -Math.abs(data.findObjectById(second.getIdElevator()).getCurrentFloor()data.findObjectById(second.getIdElevator()).getDestinationFloor())));*  // The head of the queue is that element that has the biggest way. Reverse the order subtraction cause that the head of the queue is that element that has the lowest way
+
+During testing task ordering in Main class don't pay attention on console results. The output is printed by consumer and this task isn't 
+connected with which element is on the head. Instead try run messagesInTheQueueWillBeProcessedInOrderSpecifyInComparatorInterface() test in
+ElevatorSystemTest.
 
 # Other information
 * Access to data base using DAO pattern and using interface ElevatoInterface, ElevatorInterfaceConsumer - flexible during future changes.

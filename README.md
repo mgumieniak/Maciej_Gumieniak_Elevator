@@ -29,9 +29,24 @@ objects in data base is ConcurrentHashMap. Moreover all the changes in data base
 
 Established purposes and remebered about divided problem into smaller problems I created: Producer, Consumer and ElevatorService class.
 
+# Task ordering
 
+Tasks are represented as Message objects in BlockingQueue. Creating ElevatorSystem object, the third parameter have to be object class that implements BlockingQueue interface.
 
+Example:
+* *new ElevatorSystem(...,..., new PriorityBlockingQueue<>(20, (first,second)->second.getIdElevator()-first.getIdElevator()));*
 
+Above I used PriorityBlockingQueue class. One of this class constructor as second parameter takes comparator that will be used to order 
+priority queue. Therefore class gives discretion to determine order took elements. 
 
+Below example ensure, that elevator with higher id will be handled first.
 
+More Example:
+* *new ElevatorSystem(...,..., new PriorityBlockingQueue<>(20));* // The head of the queue is that element that has to lower id. 
+* *new ElevatorSystem(...,..., new ArrayBlockingQueue<>(20));* // The head of the queue is that element that has been on the queue the longest time.
+* *new ElevatorSystem(...,..., new PriorityBlockingQueue<>(20, (first,second)-> Math.abs(data.findObjectById(first.getIdElevator()).getCurrentFloor()data.findObjectById(first.getIdElevator()).getDestinationFloor()) -Math.abs(data.findObjectById(second.getIdElevator()).getCurrentFloor()data.findObjectById(second.getIdElevator()).getDestinationFloor())));*  // The head of the queue is that element that has the biggest way. Reverse the order 
 
+# Other information
+* Access to data base using DAO pattern and using interface ElevatoInterface, ElevatorInterfaceConsumer - flexible during future changes.
+* Each method is described in src folder.
+* Each class was tested (unit test).

@@ -48,4 +48,19 @@ public interface ElevatorInterface {
      * @return modify object.
      */
     ElevatorInterface updateAndSimulationStep();
+
+    /**
+     * @return object id.
+     */
+    int getId();
+
+    /**
+     * @return object destination floor.
+     */
+    int getDestinationFloor();
+
+    /**
+     * @return object current floor.
+     */
+    int getCurrentFloor();
 }

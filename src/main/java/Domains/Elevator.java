@@ -200,6 +200,7 @@ public class Elevator implements ElevatorInterface{
      *
      * @return object id.
      */
+    @Override
     public int getId() {
         return id;
     }

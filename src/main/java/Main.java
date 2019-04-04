@@ -17,9 +17,9 @@ public class Main {
                 data, new PriorityBlockingQueue<>(20, (first,second)->second.getIdElevator()-first.getIdElevator()));
 
 
-        elevatorSystem.selectFlourInsideElevator(1,3);
+        elevatorSystem.selectFloorInsideElevator(1,3);
         elevatorSystem.pickUpElevator(1,2,-1);
-        elevatorSystem.selectFlourInsideElevator(2,5);
+        elevatorSystem.selectFloorInsideElevator(2,5);
 
         elevatorSystem.receiveData(3);
 

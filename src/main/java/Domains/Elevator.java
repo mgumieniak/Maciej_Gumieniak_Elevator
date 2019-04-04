@@ -80,7 +80,7 @@ public class Elevator implements ElevatorInterface{
                 break;
             }
         }
-        return createElevator(getId(),getcurrentFloor(),getdestinationFloor(),list);
+        return createElevator(getId(),getCurrentFloor(),getDestinationFloor(),list);
     }
 
     /**
@@ -101,7 +101,7 @@ public class Elevator implements ElevatorInterface{
                 break;
             }
         }
-        return createElevator(getId(),getcurrentFloor(),getdestinationFloor(),list);
+        return createElevator(getId(),getCurrentFloor(),getDestinationFloor(),list);
     }
 
     /**
@@ -124,11 +124,11 @@ public class Elevator implements ElevatorInterface{
         }else if(direction >0){
             return helpForDestPositive(floorReport);
         }else{ // direction ==0
-            if(this.getcurrentFloor()>floorReport){
+            if(this.getCurrentFloor()>floorReport){
                return helpForDestNegative(floorReport);
             }else return helpForDestPositive(floorReport);
         }
-        return createElevator(getId(),getcurrentFloor(),getdestinationFloor(),list);
+        return createElevator(getId(),getCurrentFloor(),getDestinationFloor(),list);
     }
 
     /**
@@ -152,10 +152,10 @@ public class Elevator implements ElevatorInterface{
      */
     @Override
     public Elevator update(){
-        if(this.getcurrentFloor() == this.getdestinationFloor() && !(this.getFloorQue().isEmpty())){
+        if(this.getCurrentFloor() == this.getDestinationFloor() && !(this.getFloorQue().isEmpty())){
             LinkedList<Integer> list= new LinkedList<>(this.getFloorQue());
             int destinationFloor = list.removeFirst();
-            return createElevator(getId(),getcurrentFloor(),destinationFloor,list);
+            return createElevator(getId(),getCurrentFloor(),destinationFloor,list);
         }else return this;
     }
 
@@ -166,13 +166,13 @@ public class Elevator implements ElevatorInterface{
      */
     @Override
     public Elevator simulationStep(){
-        if(this.getdestinationFloor() == this.getcurrentFloor()){return  this;}
-        else if(this.getdestinationFloor() > this.getcurrentFloor()){
-            int currentFloor = this.getcurrentFloor()+1;
-            return createElevator(getId(),currentFloor,getdestinationFloor(),getFloorQue());
+        if(this.getDestinationFloor() == this.getCurrentFloor()){return  this;}
+        else if(this.getDestinationFloor() > this.getCurrentFloor()){
+            int currentFloor = this.getCurrentFloor()+1;
+            return createElevator(getId(),currentFloor,getDestinationFloor(),getFloorQue());
         }else {
-            int currentFloor = this.getcurrentFloor()-1;
-            return createElevator(getId(),currentFloor,getdestinationFloor(),getFloorQue());
+            int currentFloor = this.getCurrentFloor()-1;
+            return createElevator(getId(),currentFloor,getDestinationFloor(),getFloorQue());
         }
     }
 
@@ -208,7 +208,7 @@ public class Elevator implements ElevatorInterface{
      *
      * @return object current floor.
      */
-    public int getcurrentFloor() {
+    public int getCurrentFloor() {
         return currentFloor;
     }
 
@@ -216,7 +216,7 @@ public class Elevator implements ElevatorInterface{
      *
      * @return object destination floor.
      */
-    public int getdestinationFloor() {
+    public int getDestinationFloor() {
         return destinationFloor;
     }
 
@@ -242,13 +242,13 @@ public class Elevator implements ElevatorInterface{
         if (o == null || getClass() != o.getClass()) return false;
         Elevator elevator = (Elevator) o;
         return getId() == elevator.getId() &&
-                getcurrentFloor() == elevator.getcurrentFloor() &&
-                getdestinationFloor() == elevator.getdestinationFloor() &&
+                getCurrentFloor() == elevator.getCurrentFloor() &&
+                getDestinationFloor() == elevator.getDestinationFloor() &&
                 Objects.equals(getFloorQue(), elevator.getFloorQue());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getcurrentFloor(), getdestinationFloor(), getFloorQue());
+        return Objects.hash(getId(), getCurrentFloor(), getDestinationFloor(), getFloorQue());
     }
 }

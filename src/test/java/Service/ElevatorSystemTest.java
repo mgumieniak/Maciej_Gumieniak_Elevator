@@ -73,10 +73,10 @@ class ElevatorSystemTest {
     }
 
     @Test
-    void selectFlourInsideElevatorWithTheSameIDUsingMultiThreadShouldFillQueueWithoutProblems() {
-        elevatorSystem.selectFlourInsideElevator(1,3);
-        elevatorSystem.selectFlourInsideElevator(1,4);
-        elevatorSystem.selectFlourInsideElevator(1,2);
+    void selectFloorInsideElevatorWithTheSameIDUsingMultiThreadShouldFillQueueWithoutProblems() {
+        elevatorSystem.selectFloorInsideElevator(1,3);
+        elevatorSystem.selectFloorInsideElevator(1,4);
+        elevatorSystem.selectFloorInsideElevator(1,2);
         elevatorSystem.systemShutDown(10, TimeUnit.SECONDS);
         assertAll(
                 ()->assertTrue(elevatorSystem.getQueue().contains(Message.createMessage(1,3,0,true))),
@@ -86,10 +86,10 @@ class ElevatorSystemTest {
     }
 
     @Test
-    void selectFlourInsideElevatorWithTheOderIDUsingMultiThreadShouldFillQueueWithoutProblems() {
-        elevatorSystem.selectFlourInsideElevator(1,3);
-        elevatorSystem.selectFlourInsideElevator(2,4);
-        elevatorSystem.selectFlourInsideElevator(1,2);
+    void selectFloorInsideElevatorWithTheOderIDUsingMultiThreadShouldFillQueueWithoutProblems() {
+        elevatorSystem.selectFloorInsideElevator(1,3);
+        elevatorSystem.selectFloorInsideElevator(2,4);
+        elevatorSystem.selectFloorInsideElevator(1,2);
         elevatorSystem.systemShutDown(10, TimeUnit.SECONDS);
         assertAll(
                 ()->assertTrue(elevatorSystem.getQueue().contains(Message.createMessage(1,3,0,true))),
@@ -103,9 +103,9 @@ class ElevatorSystemTest {
         elevatorSystem = new ElevatorSystem(Runtime.getRuntime().availableProcessors(),
                 data, new PriorityBlockingQueue<>(20, (first, second)->second.getIdElevator()-first.getIdElevator()));
 
-        elevatorSystem.selectFlourInsideElevator(1,3);
-        elevatorSystem.selectFlourInsideElevator(2,4);
-        elevatorSystem.selectFlourInsideElevator(3,2);
+        elevatorSystem.selectFloorInsideElevator(1,3);
+        elevatorSystem.selectFloorInsideElevator(2,4);
+        elevatorSystem.selectFloorInsideElevator(3,2);
         elevatorSystem.systemShutDown(10, TimeUnit.SECONDS);
         assertAll(
                 ()->assertEquals(Message.createMessage(3,2,0,true),elevatorSystem.getQueue().take()),
@@ -115,9 +115,9 @@ class ElevatorSystemTest {
 
     @Test
     void receiveDataFromTheQueue() {
-        elevatorSystem.selectFlourInsideElevator(1,3);
-        elevatorSystem.selectFlourInsideElevator(2,4);
-        elevatorSystem.selectFlourInsideElevator(3,2);
+        elevatorSystem.selectFloorInsideElevator(1,3);
+        elevatorSystem.selectFloorInsideElevator(2,4);
+        elevatorSystem.selectFloorInsideElevator(3,2);
         elevatorSystem.receiveData(2);
         elevatorSystem.systemShutDown(10, TimeUnit.SECONDS);
         assertAll(
@@ -128,7 +128,7 @@ class ElevatorSystemTest {
 
     @Test
     void updateAndSimulationStep() {
-        elevatorSystem.selectFlourInsideElevator(1,3);
+        elevatorSystem.selectFloorInsideElevator(1,3);
         elevatorSystem.receiveData(1);
 
         elevatorSystem.systemShutDown(10, TimeUnit.SECONDS);
@@ -140,7 +140,7 @@ class ElevatorSystemTest {
 
     @Test
     void selectIdWhichIsNotInDatabaseDontComputeElevatorDataBase() {
-        elevatorSystem.selectFlourInsideElevator(20,3);
+        elevatorSystem.selectFloorInsideElevator(20,3);
         elevatorSystem.receiveData(1);
 
         elevatorSystem.systemShutDown(10, TimeUnit.SECONDS);

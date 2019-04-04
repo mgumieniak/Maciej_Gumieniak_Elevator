@@ -8,7 +8,7 @@ import Domains.Message;
 import java.util.concurrent.BlockingQueue;
 
 /**
- * The Consumer take Messages objects from BlockingQueue and produced from it Elevator objects.
+ * The Consumer take Message class objects from BlockingQueue and produced from it Elevator objects.
  */
 public class Consumer {
     private BlockingQueue<Message> queue;

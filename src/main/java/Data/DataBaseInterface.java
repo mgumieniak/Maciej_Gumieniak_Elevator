@@ -6,7 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  *  Interface DataBaseInterface provides below method to
- *  handle with storing data about Elevator.
+ *  handle with storing data.
  *
  *  The elements in data base are separated by unique id.
  */
@@ -21,6 +21,8 @@ public interface DataBaseInterface<T> {
     void add(int id);
 
     /**
+     * Find specific object in data base.
+     *
      * @param id - unique int value enable separated objects in
      *           data base.
      * @return - object in data base connected with id

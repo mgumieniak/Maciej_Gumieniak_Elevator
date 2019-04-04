@@ -43,7 +43,6 @@ public class Message {
     }
 
     /**
-     *
      * @return Elevator id.
      */
     public int getIdElevator() {

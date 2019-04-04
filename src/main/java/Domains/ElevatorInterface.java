@@ -1,9 +1,10 @@
 package Domains;
 
 /**
- * This interface contain method to operate with elevator.
+ * This interface contain methods to operate on elevator.
  */
 public interface ElevatorInterface {
+
     /**
      * Method handle pick up the elevator from specific floor and direction.
      *

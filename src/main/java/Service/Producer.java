@@ -4,10 +4,10 @@ import Domains.Message;
 import java.util.concurrent.BlockingQueue;
 
 /**
- * The Producer create Messages objects and put them in BlockingQueue, therefore Producer class have to contain all
+ * The Producer create Message class objects and put them in BlockingQueue, therefore Producer class have to contain all
  * fields to create Message instance.
  *
- * Class simulate action realize by elevator clients.
+ * Class simulate action realized by elevator clients.
  */
 public class Producer {
     private BlockingQueue<Message> queue;

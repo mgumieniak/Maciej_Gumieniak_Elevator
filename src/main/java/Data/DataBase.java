@@ -10,15 +10,15 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /**
- *  DataBase class implements DataBaseInterface, which handle data Elevator class due to
+ *  DataBase class implements DataBaseInterface. The Class handle data Elevator class due to
  *  unique id. Id have to be the value <1,16>.
  *
  *  Data are stored in ConcurrentHashMap. It helps to deal with data using multi thread,
  *  without destroy them. To add new object into ConcurrentHashMap, method addElevator(..)
  *  use putIfAbsent. It ensure that we do not override existing object. To update existing
  *  value use compute method instead of put method, which is not thread safety. In package
- *  Service in Consumer class is the example of using compute method. To get object from
- *  ConcurrentHashMap use get method.
+ *  Service in Consumer class is the example of using compute method.
+ *  To get object from ConcurrentHashMap use get method.
  */
 public class DataBase implements DataBaseInterface<ElevatorInterface>{
 

@@ -79,7 +79,7 @@ public class ElevatorSystem implements ElevatorSystemInterface{
      */
     @Override
     public Collection<ElevatorInterface> showStatusAllElevator() {
-        return dataBase.showStatusAllElevator();
+        return dataBase.showAll();
     }
 
     /**

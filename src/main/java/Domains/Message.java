@@ -96,6 +96,6 @@ public class Message {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getIdElevator(), getDestinationFloor(), getDirection(), isSelectInsideElevator());
+        return Objects.hash(getIdElevator());
     }
 }

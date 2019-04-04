@@ -33,8 +33,8 @@ public class Main {
 
     public static DataBase init(){
         DataBase data = new DataBase();
-        data.addElevator(1);
-        data.addElevator(2);
+        data.add(1);
+        data.add(2);
         return data;
     }
 }

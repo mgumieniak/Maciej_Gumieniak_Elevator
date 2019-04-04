@@ -134,7 +134,7 @@ class ElevatorSystemTest {
         elevatorSystem.systemShutDown(10, TimeUnit.SECONDS);
         elevatorSystem.updateAndSimulationStep(1,2);
         assertAll(
-                ()->assertEquals(Elevator.createElevator(1,2,3,List.of()), elevatorSystem.getData().findElevatorUpById(1))
+                ()->assertEquals(Elevator.createElevator(1,2,3,List.of()), elevatorSystem.getData().findObjectById(1))
         );
     }
 
@@ -145,14 +145,14 @@ class ElevatorSystemTest {
 
         elevatorSystem.systemShutDown(10, TimeUnit.SECONDS);
         assertAll(
-                ()->assertThrows(IllegalArgumentException.class, ()->elevatorSystem.getData().findElevatorUpById(20))
+                ()->assertThrows(IllegalArgumentException.class, ()->elevatorSystem.getData().findObjectById(20))
         );
     }
 
     public static DataBase initDataBase(){
         DataBase data = new DataBase();
-        data.addElevator(1);
-        data.addElevator(2);
+        data.add(1);
+        data.add(2);
         return data;
     }
 }

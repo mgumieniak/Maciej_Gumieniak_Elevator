@@ -249,6 +249,6 @@ public class Elevator implements ElevatorInterface{
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getCurrentFloor(), getDestinationFloor(), getFloorQue());
+        return Objects.hash(getId());
     }
 }

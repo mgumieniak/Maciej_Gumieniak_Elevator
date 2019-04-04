@@ -20,7 +20,7 @@ import java.util.concurrent.ConcurrentMap;
  *  Service in Consumer class is the example of using compute method. To get object from
  *  ConcurrentHashMap use get method.
  */
-public class DataBase implements DataBaseInterface{
+public class DataBase implements DataBaseInterface<ElevatorInterface>{
 
     /**
      *  NUMBERSSELEVATORS - maximum nb of elevator which can be stored in data base.
@@ -54,7 +54,7 @@ public class DataBase implements DataBaseInterface{
      * @throws IllegalArgumentException if id is not between <1,16>
      */
     @Override
-    public void addElevator(int id) {
+    public void add(int id) {
         if (id <= 0 || id > numberElevator.NUMBERSSELEVATORS.getValue()) {
             throw new IllegalArgumentException("Id cannot be negative");
         }
@@ -70,7 +70,7 @@ public class DataBase implements DataBaseInterface{
      * @return the object with specific id.
      */
     @Override
-    public ElevatorInterface findElevatorUpById(int id) {
+    public ElevatorInterface findObjectById(int id) {
         ElevatorInterface elevator = map.get(id);
         if(elevator == null){
             throw new IllegalArgumentException("Dont find elevator with id = "+id);
@@ -82,13 +82,14 @@ public class DataBase implements DataBaseInterface{
      * @return Collection with all objects which was added in data base
      */
     @Override
-    public Collection<ElevatorInterface> showStatusAllElevator() {
+    public Collection<ElevatorInterface> showAll() {
         return this.getMap().values();
     }
 
     /**
      * @return ConcurrentHashMap which contains Elevator objects.
      */
+    @Override
     public ConcurrentHashMap<Integer, ElevatorInterface> getMap() {
         return map;
     }

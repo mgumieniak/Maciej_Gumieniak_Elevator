@@ -1,6 +1,8 @@
 package Service;
 
 import Data.DataBase;
+import Data.DataBaseInterface;
+import Domains.ElevatorInterface;
 import Domains.Message;
 
 import java.util.concurrent.BlockingQueue;
@@ -10,7 +12,7 @@ import java.util.concurrent.BlockingQueue;
  */
 public class Consumer {
     private BlockingQueue<Message> queue;
-    private DataBase dataBase;
+    private DataBaseInterface<ElevatorInterface> dataBase;
 
     /**
      * Construct the class instance.

@@ -1,10 +1,8 @@
 package Data;
 
-import Domains.ElevatorInterface;
-
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+
 
 /**
  *  Interface DataBaseInterface provides below method to
@@ -12,7 +10,7 @@ import java.util.List;
  *
  *  The elements in data base are separated by unique id.
  */
-public interface DataBaseInterface {
+public interface DataBaseInterface<T> {
 
     /**
      * Add new object in data base, which unique id.
@@ -20,17 +18,22 @@ public interface DataBaseInterface {
      * @param id - unique int value enable separated objects in
      *           data base.
      */
-    void addElevator(int id);
+    void add(int id);
 
     /**
      * @param id - unique int value enable separated objects in
      *           data base.
      * @return - object in data base connected with id
      */
-    ElevatorInterface findElevatorUpById(int id);
+    T findObjectById(int id);
 
     /**
      * @return Collection with all objects which was added in data base
      */
-    Collection<ElevatorInterface> showStatusAllElevator();
+    Collection<T> showAll();
+
+    /**
+     * @return ConcurrentHashMap which contain objects.
+     */
+    ConcurrentHashMap<Integer, T> getMap();
 }

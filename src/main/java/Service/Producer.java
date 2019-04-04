@@ -65,6 +65,9 @@ public class Producer {
         return destinationFloor;
     }
 
+    /**
+     * @return direction message, which will be created.
+     */
     public int getDirection() { return direction; }
 
     /**

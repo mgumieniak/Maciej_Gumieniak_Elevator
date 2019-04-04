@@ -1,6 +1,7 @@
 # Maciej_Gumieniak_Elevator
 
-This source code is available for download at https://github.com/mgumieniak/Maciej_Gumieniak_Elevator
+This source code is available for download at https://github.com/mgumieniak/Maciej_Gumieniak_Elevator.
+Please, downland program and run Main class.
 
 # Solution explanation 
 
@@ -26,9 +27,7 @@ Elevator in data base objects from BlockingQueue.
 * Above I've mentioned about update Elevator objects in data base. The most reasonable solution to have concurrent, safty and fast access to 
 objects in data base is ConcurrentHashMap. Moreover all the changes in data base required using compute method. That's way it was so important to programing Elevator class as immutable (each changes return new class instance).
 
-
-
-
+Established purposes and remebered about divided problem into smaller problems I created: Producer, Consumer and ElevatorService class.
 
 
 

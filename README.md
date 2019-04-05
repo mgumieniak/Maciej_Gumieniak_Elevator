@@ -39,7 +39,7 @@ priority queue. Therefore class gives discretion to determine order elements in 
 
 More Examples:
 * *new ElevatorSystem(...,..., new PriorityBlockingQueue<>(20));* // The head of the queue is that element that has to lower id. 
-* *new ElevatorSystem(...,..., new PriorityBlockingQueue<>(20, (first,second)-> Math.abs(data.findObjectById(first.getIdElevator()).getCurrentFloor()data.findObjectById(first.getIdElevator()).getDestinationFloor()) -Math.abs(data.findObjectById(second.getIdElevator()).getCurrentFloor()data.findObjectById(second.getIdElevator()).getDestinationFloor())));*  // The head of the queue is that element that has the biggest way. Reverse the order subtraction cause that the head of the queue is that element that has the lowest way
+* *new ElevatorSystem(...,..., new PriorityBlockingQueue<>(20, (first,second)-> Math.abs(data.findObjectById(first.getIdElevator()).getCurrentFloor()data.findObjectById(first.getIdElevator()).getDestinationFloor()) -Math.abs(data.findObjectById(second.getIdElevator()).getCurrentFloor()data.findObjectById(second.getIdElevator()).getDestinationFloor())));*  // The head of the queue is the element that has the biggest way. Reverse the order subtraction cause that the head of the queue is that element that has the lowest way
 
 During testing task ordering in Main class, please don't pay attention on console results. The output is printed by consumer (running threads) and this task isn't connected with which element is on the head. Instead try run messagesInTheQueueWillBeProcessedInOrderSpecifyInComparatorInterface() test in ElevatorSystemTest.
 
